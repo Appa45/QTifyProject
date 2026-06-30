@@ -1,0 +1,36 @@
+.section {
+    width: 100%;
+    margin-bottom: 32px;
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .toggleBtn {
+    border: none;
+    background: transparent;
+    color: #34c94b;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  
+  .content {
+    width: 100%;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+  }
