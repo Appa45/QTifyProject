@@ -5,7 +5,7 @@ export default function Search() {
     <div className={styles.wrapper}>
       <input
         type="text"
-        placeholder="Search a album of your choice"
+        placeholder="Search"
         className={styles.input}
       />
       <button className={styles.searchBtn}>
