@@ -1,10 +1,8 @@
+/* Button.module.css */
 .button {
-    background-color: #121212;
-    color: #34c94b;
-    border: none;
-    border-radius: 12px;
-    padding: 10px 16px;
-    cursor: pointer;
-    font-family: "Poppins", sans-serif;
-    font-weight: 600;
-  }
+  background-color: #121212; /* Black background variant */
+  color: #34CD41; /* Qtify Green text variant */
+  border-radius: 12px; /* Border radius */
+  cursor: pointer; /* Hover cursor variant pointer */
+  font-family: "Poppins", sans-serif; /* Poppins Font Family setup */
+}

@@ -1,9 +1,8 @@
 .navbar {
-  background-color: var(--color-primary);
-  height: 74px;
-  width: 100vw;
-  padding: 0px 32px;
   display: flex;
-  align-items: center;
+  align-items: center; /* Vertically centers the logo & elements */
   justify-content: space-between;
+  padding: 0px 32px; /* Gives the logo breathing room to its left */
+  background-color: var(--color-primary); /* Typically #121212 */
+  height: 74px;
 }
