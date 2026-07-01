@@ -23,39 +23,39 @@ export default function Carousel({ data = [], renderItem }) {
         ›
       </button>
 
-      <Swiper
-        modules={[Navigation]}
-        onBeforeInit={(swiper) => {
-          swiper.params.navigation.prevEl = ".swiper-button-prev-custom";
-          swiper.params.navigation.nextEl = ".swiper-button-next-custom";
-        }}
-        navigation={{
-          prevEl: ".swiper-button-prev-custom",
-          nextEl: ".swiper-button-next-custom",
-        }}
-        slidesPerView={4}
-        slidesPerGroup={1}
-        spaceBetween={20}
-        watchOverflow={false}
-        loop={false}
-        breakpoints={{
-          0: {
-            slidesPerView: 2,
-          },
-          768: {
-            slidesPerView: 3,
-          },
-          1024: {
-            slidesPerView: 4,
-          },
-        }}
-      >
-        {data.map((item) => (
-          <SwiperSlide key={item.id}>
-            {renderItem(item)}
-          </SwiperSlide>
-        ))}
-      </Swiper>
+     <Swiper
+  modules={[Navigation]}
+  navigation={{
+    prevEl: ".swiper-button-prev-custom",
+    nextEl: ".swiper-button-next-custom",
+  }}
+
+    onSlideChange={(swiper) => {
+    console.log("Active Index:", swiper.activeIndex);
+    console.log("isBeginning:", swiper.isBeginning);
+    console.log("isEnd:", swiper.isEnd);
+  }}
+  onBeforeInit={(swiper) => {
+    swiper.params.navigation.prevEl = ".swiper-button-prev-custom";
+    swiper.params.navigation.nextEl = ".swiper-button-next-custom";
+  }}
+  slidesPerView={4}
+  slidesPerGroup={1}
+  spaceBetween={20}
+  watchOverflow={false}
+  loop={false}
+  breakpoints={{
+    0: { slidesPerView: 2 },
+    768: { slidesPerView: 3 },
+    1024: { slidesPerView: 4 },
+  }}
+>
+  {data.map((item) => (
+    <SwiperSlide key={item.id}>
+      {renderItem(item)}
+    </SwiperSlide>
+  ))}
+</Swiper>
     </div>
   );
 }
