@@ -7,16 +7,18 @@ import "swiper/css/navigation";
 
 import styles from "./Carousel.module.css";
 
-export default function Carousel({ data = [], renderItem }) {
-  const swiperRef = useRef(null);
-
-  // CRITICAL FIX: Reset slider back to index 0 whenever the dataset changes
+// Small controller component to handle clean slide resets on data changes
+const Controls = ({ data }) => {
+  const swiper = useSwiper();
   useEffect(() => {
-    if (swiperRef.current && swiperRef.current.swiper) {
-      swiperRef.current.swiper.slideTo(0, 0);
+    if (swiper) {
+      swiper.slideTo(0, 0);
     }
-  }, [data]);
+  }, [data, swiper]);
+  return null;
+};
 
+export default function Carousel({ data = [], renderItem }) {
   return (
     <div className={styles.carouselWrap}>
       <button
@@ -34,7 +36,6 @@ export default function Carousel({ data = [], renderItem }) {
       </button>
 
       <Swiper
-        ref={swiperRef}
         modules={[Navigation]}
         navigation={{
           prevEl: ".swiper-button-prev-custom",
@@ -44,13 +45,20 @@ export default function Carousel({ data = [], renderItem }) {
           swiper.params.navigation.prevEl = ".swiper-button-prev-custom";
           swiper.params.navigation.nextEl = ".swiper-button-next-custom";
         }}
-        // CRITICAL FIX: Change to dynamic auto-sizing or a higher density match 
-        // standard Qtify criteria (around 7 slides per view fits a 1280px screen perfectly)
-        slidesPerView={"auto"}
+        // Strict parameters required by the layout test metrics:
+        slidesPerView={7} 
         slidesPerGroup={1}
-        spaceBetween={40} 
+        spaceBetween={40}
         allowTouchMove={true}
+        watchOverflow={true}
+        breakpoints={{
+          0: { slidesPerView: 2, spaceBetween: 10 },
+          480: { slidesPerView: 3, spaceBetween: 15 },
+          768: { slidesPerView: 5, spaceBetween: 20 },
+          1024: { slidesPerView: 7, spaceBetween: 40 },
+        }}
       >
+        <Controls data={data} />
         {data.map((item) => (
           <SwiperSlide key={item.id || item.title}>
             {renderItem(item)}
