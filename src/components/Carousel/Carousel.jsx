@@ -1,3 +1,4 @@
+import React, { useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 
@@ -7,6 +8,15 @@ import "swiper/css/navigation";
 import styles from "./Carousel.module.css";
 
 export default function Carousel({ data = [], renderItem }) {
+  const swiperRef = useRef(null);
+
+  // CRITICAL FIX: Reset slider back to index 0 whenever the dataset changes
+  useEffect(() => {
+    if (swiperRef.current && swiperRef.current.swiper) {
+      swiperRef.current.swiper.slideTo(0, 0);
+    }
+  }, [data]);
+
   return (
     <div className={styles.carouselWrap}>
       <button
@@ -23,39 +33,30 @@ export default function Carousel({ data = [], renderItem }) {
         ›
       </button>
 
-     <Swiper
-  modules={[Navigation]}
-  navigation={{
-    prevEl: ".swiper-button-prev-custom",
-    nextEl: ".swiper-button-next-custom",
-  }}
-
-    onSlideChange={(swiper) => {
-    console.log("Active Index:", swiper.activeIndex);
-    console.log("isBeginning:", swiper.isBeginning);
-    console.log("isEnd:", swiper.isEnd);
-  }}
-  onBeforeInit={(swiper) => {
-    swiper.params.navigation.prevEl = ".swiper-button-prev-custom";
-    swiper.params.navigation.nextEl = ".swiper-button-next-custom";
-  }}
-  slidesPerView={4}
-  slidesPerGroup={1}
-  spaceBetween={20}
-  watchOverflow={false}
-  loop={false}
-  breakpoints={{
-    0: { slidesPerView: 2 },
-    768: { slidesPerView: 3 },
-    1024: { slidesPerView: 4 },
-  }}
->
-  {data.map((item) => (
-    <SwiperSlide key={item.id}>
-      {renderItem(item)}
-    </SwiperSlide>
-  ))}
-</Swiper>
+      <Swiper
+        ref={swiperRef}
+        modules={[Navigation]}
+        navigation={{
+          prevEl: ".swiper-button-prev-custom",
+          nextEl: ".swiper-button-next-custom",
+        }}
+        onBeforeInit={(swiper) => {
+          swiper.params.navigation.prevEl = ".swiper-button-prev-custom";
+          swiper.params.navigation.nextEl = ".swiper-button-next-custom";
+        }}
+        // CRITICAL FIX: Change to dynamic auto-sizing or a higher density match 
+        // standard Qtify criteria (around 7 slides per view fits a 1280px screen perfectly)
+        slidesPerView={"auto"}
+        slidesPerGroup={1}
+        spaceBetween={40} 
+        allowTouchMove={true}
+      >
+        {data.map((item) => (
+          <SwiperSlide key={item.id || item.title}>
+            {renderItem(item)}
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 }
