@@ -35,7 +35,7 @@ export default function Carousel({ data = [], renderItem }) {
         Cypress can now click these 4 times cleanly without throwing an element-disabled error.
       */}
       <button
-        className={`swiper-button-prev-custom ${styles.navBtn}`}
+      className={`prev-${id.replace(/\s/g, "")} ${styles.navBtn}`}
         aria-label="Previous"
         onClick={handlePrev}
       >
@@ -43,7 +43,7 @@ export default function Carousel({ data = [], renderItem }) {
       </button>
 
       <button
-        className={`swiper-button-next-custom ${styles.navBtn}`}
+        className={`next-${id.replace(/\s/g, "")} ${styles.navBtn}`}
         aria-label="Next"
         onClick={handleNext}
       >

@@ -33,7 +33,11 @@ export default function Section({
             {data.map((item) => renderItem(item))}
           </div>
         ) : (
-          <Carousel data={data} renderItem={renderItem} />
+          <Carousel
+  id={title}
+  data={data}
+  renderItem={renderItem}
+/>
         )}
       </div>
     </section>
