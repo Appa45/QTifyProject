@@ -3,53 +3,42 @@ import axios from "axios";
 import Section from "../Section/Section";
 import Card from "../Card/Card";
 
-export default function Albums() {
-  const [topAlbums, setTopAlbums] = useState([]);
-  const [newAlbums, setNewAlbums] = useState([]);
+const BASE_URL = "https://qtify-backend.labs.crio.do";
+
+export default function Albums({ title }) {
+  const [albums, setAlbums] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const [topRes, newRes] = await Promise.all([
-        axios.get("https://qtify-backend.labs.crio.do/albums/top"),
-        axios.get("https://qtify-backend.labs.crio.do/albums/new"),
-      ]);
+    const fetchAlbums = async () => {
+      try {
+        const endpoint =
+          title === "Top Albums"
+            ? `${BASE_URL}/albums/top`
+            : `${BASE_URL}/albums/new`;
 
-      setTopAlbums(topRes.data);
-      setNewAlbums(newRes.data);
+        const response = await axios.get(endpoint);
+        setAlbums(response.data);
+      } catch (error) {
+        console.error("Error fetching albums:", error);
+      }
     };
 
-    fetchData();
-  }, []);
+    fetchAlbums();
+  }, [title]);
 
   return (
-    <>
-      <Section
-        title="Top Albums"
-        data={topAlbums}
-        renderItem={(item) => (
-          <Card
-            key={item.id}
-            image={item.image}
-            title={item.title}
-            count={item.follows}
-            countLabel="Follows"
-          />
-        )}
-      />
-
-      <Section
-        title="New Albums"
-        data={newAlbums}
-        renderItem={(item) => (
-          <Card
-            key={item.id}
-            image={item.image}
-            title={item.title}
-            count={item.follows}
-            countLabel="Follows"
-          />
-        )}
-      />
-    </>
+    <Section
+      title={title}
+      data={albums}
+      renderItem={(item) => (
+        <Card
+          key={item.id}
+          image={item.image}
+          title={item.title}
+          count={item.follows}
+          countLabel="Follows"
+        />
+      )}
+    />
   );
 }
