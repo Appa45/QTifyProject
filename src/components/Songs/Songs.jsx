@@ -3,7 +3,7 @@ import axios from "axios";
 import Section from "../Section/Section";
 import Card from "../Card/Card";
 
-const SONGS_API = "https://qtify-backend-labs.crio.do/songs";
+const SONGS_API = "https://qtify-backend.labs.crio.do/songs";
 
 export default function Songs() {
   const [songs, setSongs] = useState([]);
