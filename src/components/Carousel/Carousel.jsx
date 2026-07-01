@@ -6,17 +6,19 @@ import "swiper/css";
 
 import styles from "./Carousel.module.css";
 
-export default function Carousel({ data = [], renderItem }) {
+// 1. Accept 'id' here in the props destructuring!
+export default function Carousel({ id = "default", data = [], renderItem }) {
   const swiperRef = useRef(null);
 
-  // Force reset back to the start if the data updates
+  // Clean the ID string so it creates a safe class name selector
+  const cleanId = id.replace(/\s/g, "");
+
   useEffect(() => {
     if (swiperRef.current && swiperRef.current.swiper) {
       swiperRef.current.swiper.slideTo(0, 0);
     }
   }, [data]);
 
-  // Programmatic handlers that never render standard HTML 'disabled' attributes
   const handlePrev = () => {
     if (swiperRef.current && swiperRef.current.swiper) {
       swiperRef.current.swiper.slidePrev();
@@ -31,11 +33,8 @@ export default function Carousel({ data = [], renderItem }) {
 
   return (
     <div className={styles.carouselWrap}>
-      {/* CRITICAL: We change these to use onClick handlers directly.
-        Cypress can now click these 4 times cleanly without throwing an element-disabled error.
-      */}
       <button
-      className={`prev-${id.replace(/\s/g, "")} ${styles.navBtn}`}
+        className={`prev-${cleanId} ${styles.navBtn}`}
         aria-label="Previous"
         onClick={handlePrev}
       >
@@ -43,7 +42,7 @@ export default function Carousel({ data = [], renderItem }) {
       </button>
 
       <button
-        className={`next-${id.replace(/\s/g, "")} ${styles.navBtn}`}
+        className={`next-${cleanId} ${styles.navBtn}`}
         aria-label="Next"
         onClick={handleNext}
       >
@@ -53,11 +52,20 @@ export default function Carousel({ data = [], renderItem }) {
       <Swiper
         ref={swiperRef}
         modules={[Navigation]}
+        // Bind the selectors cleanly to avoid Swiper overriding native layouts
+        navigation={{
+          prevEl: `.prev-${cleanId}`,
+          nextEl: `.next-${cleanId}`,
+        }}
+        onBeforeInit={(swiper) => {
+          swiper.params.navigation.prevEl = `.prev-${cleanId}`;
+          swiper.params.navigation.nextEl = `.next-${cleanId}`;
+        }}
         slidesPerView={7}
         slidesPerGroup={1}
         spaceBetween={40}
         allowTouchMove={true}
-        watchOverflow={false} // Prevents Swiper from soft-locking controls
+        watchOverflow={false} 
         breakpoints={{
           0: { slidesPerView: 2, spaceBetween: 10 },
           480: { slidesPerView: 3, spaceBetween: 15 },
